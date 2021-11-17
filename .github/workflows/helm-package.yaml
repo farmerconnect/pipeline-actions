@@ -1,6 +1,5 @@
 name: Helm Package
 on:
-  workflow_dispatch:
   workflow_call:
     inputs:
       serviceName:
@@ -22,10 +21,10 @@ jobs:
       - name: Package Dev
         uses: WyriHaximus/github-action-helm3@v2
         with:
-          exec: helm package charts/${{inputs.serviceName}} --namespace ${{ inputs.namespace }} --destination path/to/charts
+          exec: helm package charts/${{ github.event.inputs.serviceName || inputs.serviceName }} --namespace ${{ github.event.inputs.namespace || inputs.namespace }} --destination path/to/charts
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ inputs.serviceName }}
+          name: ${{ github.event.inputs.serviceName || inputs.serviceName }}
           path: path/to/charts

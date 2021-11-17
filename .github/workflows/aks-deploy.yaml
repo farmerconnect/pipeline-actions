@@ -20,25 +20,6 @@ on:
     secrets:
       KUBECONFIG:
         required: true
-  workflow_dispatch:
-    inputs:
-      serviceName:
-        required: true
-        description: Service Name
-      currentTag:
-        required: true
-        description: Image Version
-      namespace:
-        required: true
-        description: Namespace
-      environment:
-        required: true
-        description: Environment (dev, test, prod)
-        default: test
-      context:
-        required: true
-        description: Kubernetes context name
-        default: tmf-tst-centralus-aks
 
 jobs:
   deploy:
@@ -47,28 +28,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Download Artifacts
-        if: ${{ github.event_name != 'workflow_dispatch' }}
-        uses: actions/download-artifact@v2
-        with:
-          name: ${{ inputs.serviceName }}
-
-      - name: Download Artifacts
-        if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: deployment.yaml
           workflow_conclusion: success
 
       - name: Helm Upgrade
-        if: ${{ github.event_name != 'workflow_dispatch' }}
         uses: WyriHaximus/github-action-helm3@v2
         with:
-          exec: helm upgrade --kube-context ${{ inputs.context }} --namespace ${{ inputs.namespace }} --install --values ./charts/values-${{ inputs.environment }}.yaml --set serviceVersion=${{ inputs.currentTag }} --wait --atomic --timeout 300s ${{ inputs.serviceName }} ${{ inputs.serviceName }}-1.0.0.tgz
-          kubeconfig: '${{ secrets.KUBECONFIG }}'
-
-      - name: Helm Upgrade
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: WyriHaximus/github-action-helm3@v2
-        with:
-          exec: helm upgrade --kube-context ${{ github.event.inputs.context }} --namespace ${{ github.event.inputs.namespace }} --install --values ./charts/values-${{ github.event.inputs.environment }}.yaml --set serviceVersion=${{ github.event.inputs.currentTag }} --wait --atomic --timeout 300s ${{ github.event.inputs.serviceName }} ${{ github.event.inputs.serviceName }}/${{ github.event.inputs.serviceName }}-1.0.0.tgz
+          exec: helm upgrade --kube-context ${{ github.event.inputs.context || inputs.context }} --namespace ${{ github.event.inputs.namespace || inputs.namespace }} --install --values ./charts/values-${{ github.event.inputs.environment || inputs.environment }}.yaml --set serviceVersion=${{ github.event.inputs.currentTag || inputs.currentTag }} --wait --atomic --timeout 300s ${{ github.event.inputs.serviceName || inputs.serviceName }} ${{ github.event.inputs.serviceName || inputs.serviceName }}/${{ github.event.inputs.serviceName || inputs.serviceName }}-1.0.0.tgz
           kubeconfig: '${{ secrets.KUBECONFIG }}'
