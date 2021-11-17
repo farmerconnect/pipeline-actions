@@ -25,6 +25,8 @@ jobs:
   deploy:
     name: Deploy to AKS
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment || inputs.environment }}
     steps:
       - uses: actions/checkout@v2
       - name: Download Artifacts
