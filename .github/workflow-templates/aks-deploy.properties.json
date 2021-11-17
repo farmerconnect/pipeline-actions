@@ -1,9 +1,0 @@
-{
-  "name": "Deploy to AKS Workflow",
-  "description": "farmer connect's workflow to deploy a service to AKS using Helm.",
-  "iconName": "mono",
-  "categories": [
-      "YAML",
-      "Dockerfile"
-  ]
-}

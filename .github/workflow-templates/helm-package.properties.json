@@ -1,8 +1,0 @@
-{
-  "name": "Package Helm charts",
-  "description": "farmer connect's workflow to package Helm charts as build artifcats.",
-  "iconName": "mono",
-  "categories": [
-      "YAML"
-  ]
-}
