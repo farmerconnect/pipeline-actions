@@ -1,0 +1,27 @@
+name: Yarn - Test & Build
+on:
+  workflow_dispatch:
+  workflow_call:
+  pull_request:
+    branches:
+      - [ $default-branch ]
+
+jobs:
+  tests:
+    name: Test Stage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+      - name: Install dependencies
+        run: yarn install
+      #missing yarn audit
+      - name: Run lint
+        run: yarn lint
+      - name: Run build
+        run: yarn build
+      - name: Run test-ci
+        run: yarn test-ci
