@@ -5,6 +5,8 @@ on:
       projects:
         required: true
         type: string
+        description: Project's entry file name or pattern
+        default: '*.sln'
 
 jobs:
   tests:
@@ -32,4 +34,4 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Run unit tests
-        run: dotnet test --no-build --verbosity normal ${{ github.event.inputs.projects || inputs.projects }}
+        run: dotnet test --no-build --verbosity normal `find . -name "${{ github.event.inputs.projects || inputs.projects }}"`
