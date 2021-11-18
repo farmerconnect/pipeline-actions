@@ -1,4 +1,6 @@
 name: AKS Deployment
+description: Deploy a Helm application to Kubernetes in AKS.
+
 on:
   workflow_call:
     inputs:

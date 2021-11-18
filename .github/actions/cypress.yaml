@@ -1,0 +1,26 @@
+name: Cypress - Test
+description: Runs cypress tests in NPM-based projects. Requires "cypress" script in package.json with the desired command
+
+inputs:
+  projects:
+    required: false
+    type: string
+    description: Project's entry file name or pattern
+    default: 'package.json'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Run tests
+      run: yarn cypress-ci
+      shell: bash

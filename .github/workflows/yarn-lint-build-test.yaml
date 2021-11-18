@@ -1,4 +1,6 @@
 name: Yarn - Test & Build
+description: Tests and builds NPM-based projects with Yarn.
+
 on:
   workflow_dispatch:
   workflow_call:
