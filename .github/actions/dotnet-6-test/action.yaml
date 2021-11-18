@@ -1,3 +1,4 @@
+# .NET 6 build and test
 name: Dotnet - Test
 description: Runs format checks and tests on dotnet projects
 
@@ -23,13 +24,6 @@ runs:
 
     - name: Restore dependencies
       run: dotnet restore
-      shell: bash
-
-    - name: Add dotnet-format problem matcher
-      uses: xt0rted/dotnet-format-problem-matcher@v1
-
-    - name: Install dotnet format
-      run: dotnet tool update --global dotnet-format
       shell: bash
 
     - name: Run dotnet format
