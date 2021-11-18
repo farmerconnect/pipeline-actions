@@ -15,7 +15,8 @@ jobs:
           node-version: '16'
       - name: Install dependencies
         run: yarn install
-      #missing yarn audit
+      - name: yarn audit
+        run: yarn audit --groups dependencies
       - name: Run lint
         run: yarn lint
       - name: Run build
