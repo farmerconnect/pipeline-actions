@@ -42,8 +42,6 @@ jobs:
       - name: Download Artifacts from current run
         uses: actions/download-artifact@v2
         if: ${{ inputs.downloadArtifactFromCurrentRun }}
-        with:
-          path: ${{ inputs.serviceName }}/
           
       - name: Download Artifacts previous run
         uses: dawidd6/action-download-artifact@v2
