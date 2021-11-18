@@ -27,7 +27,7 @@ jobs:
     name: Deploy to AKS
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.event.inputs.environment || inputs.environment }}
+      name: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v2
       - name: Download Artifacts
@@ -39,5 +39,5 @@ jobs:
       - name: Helm Upgrade
         uses: WyriHaximus/github-action-helm3@v2
         with:
-          exec: helm upgrade --kube-context ${{ github.event.inputs.context || inputs.context }} --namespace ${{ github.event.inputs.namespace || inputs.namespace }} --install --values ./charts/values-${{ github.event.inputs.environment || inputs.environment }}.yaml --set serviceVersion=${{ github.event.inputs.currentTag || inputs.currentTag }} --wait --atomic --timeout 300s ${{ github.event.inputs.serviceName || inputs.serviceName }} ${{ github.event.inputs.serviceName || inputs.serviceName }}/${{ github.event.inputs.serviceName || inputs.serviceName }}-1.0.0.tgz
+          exec: helm upgrade --kube-context ${{ inputs.context }} --namespace ${{ inputs.namespace }} --install --values ./charts/values-${{ inputs.environment }}.yaml --set serviceVersion=${{ inputs.currentTag }} --wait --atomic --timeout 300s ${{ inputs.serviceName }} ${{ inputs.serviceName }}/${{ inputs.serviceName }}-1.0.0.tgz
           kubeconfig: '${{ secrets.KUBECONFIG }}'

@@ -22,10 +22,10 @@ jobs:
       - name: Package Dev
         uses: WyriHaximus/github-action-helm3@v2
         with:
-          exec: helm package charts/${{ github.event.inputs.serviceName || inputs.serviceName }} --namespace ${{ github.event.inputs.namespace || inputs.namespace }} --destination path/to/charts
+          exec: helm package charts/${{ inputs.serviceName }} --namespace ${{ inputs.namespace }} --destination path/to/charts
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ github.event.inputs.serviceName || inputs.serviceName }}
+          name: ${{ inputs.serviceName }}
           path: path/to/charts
