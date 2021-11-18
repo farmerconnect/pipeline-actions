@@ -2,9 +2,6 @@ name: Yarn - Test & Build
 
 on:
   workflow_call:
-  pull_request:
-    branches:
-      - main
 
 jobs:
   tests:
