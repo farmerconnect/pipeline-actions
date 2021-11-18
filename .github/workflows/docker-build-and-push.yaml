@@ -1,4 +1,5 @@
 name: Docker - Build, Push
+
 on:
   workflow_call:
     inputs:
@@ -28,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@main
       - name: Set Job-Environment Variables
-        run: echo "IMAGE_NAME=${{ secrets.registryLoginServer }}/${{ github.event.inputs.serviceName || inputs.serviceName }}" >> $GITHUB_ENV
+        run: echo "IMAGE_NAME=${{ secrets.registryLoginServer }}/${{ inputs.serviceName }}" >> $GITHUB_ENV
 
       - name: AZ login
         uses: azure/login@v1
@@ -43,9 +44,9 @@ jobs:
           password: ${{ secrets.registryPassword }}
       - name: Build and push image
         run: |
-          docker build . -t ${IMAGE_NAME}:${{ github.event.inputs.currentTag || inputs.currentTag }}
+          docker build . -t ${IMAGE_NAME}:${{ inputs.currentTag }}
           docker build . -t ${IMAGE_NAME}:latest
-          docker push ${IMAGE_NAME}:${{ github.event.inputs.currentTag || inputs.currentTag }}
+          docker push ${IMAGE_NAME}:${{ inputs.currentTag }}
           docker push ${IMAGE_NAME}:latest
 
       - name: Deploy to registry - current
@@ -53,11 +54,11 @@ jobs:
         with:
           resource-group: ${{ secrets.resourceGroup }}
           dns-name-label: ${{ secrets.resourceGroup }}${{ github.run_number }}
-          image: ${{ env.IMAGE_NAME }}:${{ github.event.inputs.currentTag || inputs.currentTag }}
+          image: ${{ env.IMAGE_NAME }}:${{ inputs.currentTag }}
           registry-login-server: ${{ secrets.registryLoginServer }}
           registry-username: ${{ secrets.registryUsername }}
           registry-password: ${{ secrets.registryPassword }}
-          name: ${{ github.event.inputs.serviceName || inputs.serviceName }}
+          name: ${{ inputs.serviceName }}
           location: 'central us'
 
       - name: Deploy to registry - latest
@@ -69,5 +70,5 @@ jobs:
           registry-login-server: ${{ secrets.registryLoginServer }}
           registry-username: ${{ secrets.registryUsername }}
           registry-password: ${{ secrets.registryPassword }}
-          name: ${{ github.event.inputs.serviceName || inputs.serviceName }}
+          name: ${{ inputs.serviceName }}
           location: 'central us'

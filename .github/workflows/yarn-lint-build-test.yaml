@@ -1,10 +1,7 @@
 name: Yarn - Test & Build
+
 on:
-  workflow_dispatch:
   workflow_call:
-  pull_request:
-    branches:
-      - main
 
 jobs:
   tests:
@@ -18,7 +15,8 @@ jobs:
           node-version: '16'
       - name: Install dependencies
         run: yarn install
-      #missing yarn audit
+      - name: yarn audit
+        run: yarn audit --groups dependencies
       - name: Run lint
         run: yarn lint
       - name: Run build
