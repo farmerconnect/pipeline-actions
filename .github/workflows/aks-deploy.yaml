@@ -18,6 +18,14 @@ on:
       context:
         required: true
         type: string
+      downloadArtifactFromCurrentRun:
+        required: false
+        default: true
+        type: boolean
+      downloadArtifactFromWorkflow:
+        required: false
+        default: deployment.yaml
+        type: string
     secrets:
       KUBECONFIG:
         required: true
@@ -29,11 +37,16 @@ jobs:
     environment:
       name: ${{ inputs.environment }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Download Artifacts
+      - uses: actions/checkout@v2      
+      - name: Download Artifacts from current run
+        uses: actions/download-artifact@v2
+        if: ${{ inputs.downloadArtifactFromCurrentRun }}
+          
+      - name: Download Artifacts previous run
         uses: dawidd6/action-download-artifact@v2
+        if: ${{ !inputs.downloadArtifactFromCurrentRun }}
         with:
-          workflow: deployment.yaml
+          workflow: ${{ inputs.downloadArtifactFromWorkflow }}
           workflow_conclusion: success
 
       - name: Helm Upgrade
