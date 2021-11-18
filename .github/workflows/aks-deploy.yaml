@@ -40,7 +40,6 @@ jobs:
         with:
           workflow: deployment.yaml
           workflow_conclusion: ${{ inputs.downloadArtifactFrom }}
-          name: ${{ inputs.serviceName }}
 
       - name: Helm Upgrade
         uses: WyriHaximus/github-action-helm3@v2
