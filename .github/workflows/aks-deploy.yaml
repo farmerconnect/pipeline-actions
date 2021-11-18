@@ -18,6 +18,11 @@ on:
       context:
         required: true
         type: string
+      workflowStatus:
+        required: false
+        default: success
+        type: string
+        description: 'Options: success or in_progress'        
     secrets:
       KUBECONFIG:
         required: true
@@ -31,10 +36,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Download Artifacts
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v2        
         with:
           workflow: deployment.yaml
-          workflow_conclusion: success
+          workflow_conclusion: ${{ inputs.workflowStatus }}
 
       - name: Helm Upgrade
         uses: WyriHaximus/github-action-helm3@v2
