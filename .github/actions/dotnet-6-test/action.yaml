@@ -35,5 +35,5 @@ runs:
       shell: bash
 
     - name: Run tests
-      run: dotnet test --no-build --verbosity normal `find . -name "${{ github.event.inputs.projects || inputs.projects }}"` --filter "${{ github.event.inputs.filter || inputs.filter }}"}
+      run: dotnet test --no-build --verbosity normal `find . -name "${{ github.event.inputs.projects || inputs.projects }}"` --filter "${{ github.event.inputs.filter || inputs.filter }}"
       shell: bash
