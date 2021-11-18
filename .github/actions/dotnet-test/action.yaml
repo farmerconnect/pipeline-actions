@@ -3,10 +3,15 @@ description: Runs format checks and tests on dotnet projects
 
 inputs:
   projects:
-    required: true
+    required: false
     type: string
     description: Project's entry file name or pattern
     default: '*.sln'
+  filter:
+    required: false
+    type: string
+    description: XUnit filter
+    default: ''
 
 runs:
   using: "composite"
@@ -35,6 +40,6 @@ runs:
       run: dotnet build --no-restore
       shell: bash
 
-    - name: Run unit tests
-      run: dotnet test --no-build --verbosity normal `find . -name "${{ github.event.inputs.projects || inputs.projects }}"`
+    - name: Run tests
+      run: dotnet test --no-build --verbosity normal `find . -name "${{ github.event.inputs.projects || inputs.projects }}"` --filter "${{ github.event.inputs.filter || inputs.filter }}"}
       shell: bash
