@@ -18,11 +18,11 @@ on:
       context:
         required: true
         type: string
-      workflowStatus:
+      downloadArtifactFrom:
         required: false
         default: success
         type: string
-        description: 'Options: success or in_progress'        
+        description: 'Options: success, take charts from last build for a manually triggered deploy or in_progress, take charts from current running build'        
     secrets:
       KUBECONFIG:
         required: true
@@ -39,7 +39,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: deployment.yaml
-          workflow_conclusion: ${{ inputs.workflowStatus }}
+          workflow_conclusion: ${{ inputs.downloadArtifactFrom }}
 
       - name: Helm Upgrade
         uses: WyriHaximus/github-action-helm3@v2
