@@ -1,5 +1,4 @@
 name: Cypress - Test
-description: Runs cypress tests in NPM-based projects. Requires "cypress" script in package.json with the desired command
 
 inputs:
   projects:

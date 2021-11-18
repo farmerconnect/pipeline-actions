@@ -1,5 +1,4 @@
 name: Helm Package
-description: Packages a Helm chart to prepare for deployment.
 
 on:
   workflow_call:
