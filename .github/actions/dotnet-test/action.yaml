@@ -1,0 +1,42 @@
+name: Dotnet - Test
+description: Runs format checks and tests on dotnet projects
+
+inputs:
+  projects:
+    required: true
+    type: string
+    description: Project's entry file name or pattern
+    default: '*.sln'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      shell: bash
+
+    - name: Restore dependencies
+      run: dotnet restore
+      shell: bash
+
+    - name: Add dotnet-format problem matcher
+      uses: xt0rted/dotnet-format-problem-matcher@v1
+      shell: bash
+
+    - name: Install dotnet format
+      run: dotnet tool update --global dotnet-format
+      shell: bash
+
+    - name: Run dotnet format
+      run: dotnet format --fix-whitespace --fix-style warn --fix-analyzers warn --check --verbosity diagnostic
+      shell: bash
+
+    - name: Build
+      run: dotnet build --no-restore
+      shell: bash
+
+    - name: Run unit tests
+      run: dotnet test --no-build --verbosity normal `find . -name "${{ github.event.inputs.projects || inputs.projects }}"`
+      shell: bash
