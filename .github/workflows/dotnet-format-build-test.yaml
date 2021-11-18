@@ -1,0 +1,35 @@
+name: Dotnet - Test & Build
+on:
+  workflow_call:
+    inputs:
+      projects:
+        required: true
+        type: string
+
+jobs:
+  tests:
+    name: Test Stage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Add dotnet-format problem matcher
+        uses: xt0rted/dotnet-format-problem-matcher@v1
+
+      - name: Install dotnet format
+        run: dotnet tool update --global dotnet-format
+
+      - name: Run dotnet format
+        run: dotnet format --fix-whitespace --fix-style warn --fix-analyzers warn --check --verbosity diagnostic
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Run unit tests
+        run: dotnet test --no-build --verbosity normal ${{ github.event.inputs.projects || inputs.projects }}
