@@ -27,7 +27,7 @@ runs:
       shell: bash
 
     - name: Run dotnet format
-      run: dotnet format --fix-whitespace --fix-style warn --fix-analyzers warn --check --verbosity diagnostic
+      run: dotnet format --severity warn --verify-no-changes --verbosity detailed
       shell: bash
 
     - name: Build
