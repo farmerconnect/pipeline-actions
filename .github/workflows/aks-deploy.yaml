@@ -37,8 +37,7 @@ jobs:
     environment:
       name: ${{ inputs.environment }}
     steps:
-      - uses: actions/checkout@v2
-      
+      - uses: actions/checkout@v2      
       - name: Download Artifacts from current run
         uses: actions/download-artifact@v2
         if: ${{ inputs.downloadArtifactFromCurrentRun }}
@@ -48,10 +47,8 @@ jobs:
         if: ${{ !inputs.downloadArtifactFromCurrentRun }}
         with:
           workflow: ${{ inputs.downloadArtifactFromWorkflow }}
-      
-      - name: Display structure of downloaded files
-        run: ls -R
-        
+          workflow_conclusion: success
+
       - name: Helm Upgrade
         uses: WyriHaximus/github-action-helm3@v2
         with:
