@@ -1,4 +1,4 @@
-# .NET 6 build and test
+# .NET 6 build and test 
 name: Dotnet - Test
 description: Runs format checks and tests on dotnet projects
 
