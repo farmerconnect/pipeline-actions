@@ -38,18 +38,22 @@ jobs:
       name: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v2
-      - name: Download Artifacts
-        uses: dawidd6/action-download-artifact@v2
-        if: ${{ !inputs.downloadArtifactFromCurrentRun }}
-        with:
-          workflow: ${{ inputs.downloadArtifactFromWorkflow }}
       
-      - name: Download Artifacts
+      - name: Download Artifacts from current run
         uses: actions/download-artifact@v2
         if: ${{ inputs.downloadArtifactFromCurrentRun }}
         with:
           path: ${{ inputs.serviceName }}/
           
+      - name: Download Artifacts previous run
+        uses: dawidd6/action-download-artifact@v2
+        if: ${{ !inputs.downloadArtifactFromCurrentRun }}
+        with:
+          workflow: ${{ inputs.downloadArtifactFromWorkflow }}
+      
+      - name: Display structure of downloaded files
+        run: ls -R
+        
       - name: Helm Upgrade
         uses: WyriHaximus/github-action-helm3@v2
         with:
