@@ -63,16 +63,6 @@ jobs:
           name: ${{ inputs.serviceName }}
           location: 'central us'
 
-      - name: Snyk scan
-        uses: farmerconnect/pipeline-actions/.github/snyk-docker.yaml@feat/snyk
-        with:
-          containerRegistryUrl: ${{ secrets.registryLoginServer }}
-          imageName: ${{ inputs.serviceName }}
-          imageTag: ${{ inputs.currentTag }}
-        secrets:
-          snykToken: ${{ secrets.snykToken }}
-
-
       - name: Deploy to registry - latest
         uses: azure/aci-deploy@v1
         with:
@@ -84,3 +74,14 @@ jobs:
           registry-password: ${{ secrets.registryPassword }}
           name: ${{ inputs.serviceName }}
           location: 'central us'
+
+  snyk-docker-scan:
+    - name: Snyk docker scan
+      needs: build-and-push-image
+      uses: farmerconnect/pipeline-actions/.github/snyk-docker.yaml@feat/snyk
+      with:
+        containerRegistryUrl: ${{ secrets.registryLoginServer }}
+        imageName: ${{ inputs.serviceName }}
+        imageTag: ${{ inputs.currentTag }}
+      secrets:
+        snykToken: ${{ secrets.snykToken }}
