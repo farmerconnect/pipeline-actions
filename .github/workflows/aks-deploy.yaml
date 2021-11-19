@@ -9,18 +9,16 @@ on:
       currentTag:
         required: true
         type: string
+        description: "github sha"
       namespace:
         required: true
         type: string
       environment:
         required: true
         type: string
+        description: "dev test prod"
       context:
         required: true
-        type: string
-      downloadArtifactFromWorkflow:
-        required: false
-        default: deployment.yaml
         type: string
     secrets:
       KUBECONFIG:
@@ -33,14 +31,21 @@ jobs:
     environment:
       name: ${{ inputs.environment }}
     steps:
-      - name: Download Artifacts
-        uses: dawidd6/action-download-artifact@v2
+      - name: Checkout code
+        uses: action/checkout@v2
         with:
-          workflow: ${{ inputs.downloadArtifactFromWorkflow }}
-          workflow_conclusion: success
+          ref: ${{ inputs.currentTag }}
+
+      - name: Create folder for rendered charts
+        run: mkdir -p path/to/charts
+
+      - name: Package Dev
+        uses: WyriHaximus/github-action-helm3@v2
+        with:
+          exec: helm package charts/${{ inputs.serviceName }} --namespace ${{ inputs.namespace }} --destination path/to/charts
 
       - name: Helm Upgrade
         uses: WyriHaximus/github-action-helm3@v2
         with:
-          exec: helm upgrade --kube-context ${{ inputs.context }} --namespace ${{ inputs.namespace }} --install --values ./charts/values-${{ inputs.environment }}.yaml --set serviceVersion=${{ inputs.currentTag }} --wait --atomic --timeout 300s ${{ inputs.serviceName }} ${{ inputs.serviceName }}/${{ inputs.serviceName }}-1.0.0.tgz
+          exec: helm upgrade --kube-context ${{ inputs.context }} --namespace ${{ inputs.namespace }} --install --values ./charts/values-${{ inputs.environment }}.yaml --set serviceVersion=${{ inputs.currentTag }} --wait --atomic --timeout 300s ${{ inputs.serviceName }} path/to/charts/${{ inputs.serviceName }}-1.0.0.tgz
           kubeconfig: '${{ secrets.KUBECONFIG }}'
