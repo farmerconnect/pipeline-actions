@@ -84,4 +84,4 @@ jobs:
       env:
         SNYK_TOKEN: ${{ secrets.snykToken }}
       with:
-        image: ${{ env.IMAGE_NAME }}:${{ inputs.currentTag }}
+        image: ${{ secrets.registryLoginServer }}/${{ inputs.serviceName }}:${{ inputs.currentTag }}
