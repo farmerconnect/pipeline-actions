@@ -1,15 +1,20 @@
 name: Snyk - Docker
 
-inputs:
-  containerRegistryUrl:
-    required: true
-    type: string
-  imageName:
-    required: true
-    type: string
-  imageTag:
-    required: true
-    type: string
+on:
+  workflow_call:
+    inputs:
+      containerRegistryUrl:
+        required: true
+        type: string
+      imageName:
+        required: true
+        type: string
+      imageTag:
+        required: true
+        type: string
+    secrets:
+      SNYK_TOKEN:
+        required: true
 
 jobs:
   security:
