@@ -75,13 +75,13 @@ jobs:
           name: ${{ inputs.serviceName }}
           location: 'central us'
 
-  snyk-docker-scan:
-    name: Snyk docker scan
+  security:
+    runs-on: ubuntu-latest
     needs: build-and-push-image
-    uses: farmerconnect/pipeline-actions/.github/workflows/snyk-docker.yaml@feat/snyk
-    with:
-      containerRegistryUrl: ${{ secrets.registryLoginServer }}
-      imageName: ${{ inputs.serviceName }}
-      imageTag: ${{ inputs.currentTag }}
-    secrets:
-      snykToken: ${{ secrets.snykToken }}
+    steps:
+    - name: Run Snyk to check Docker image for vulnerabilities
+      uses: snyk/actions/docker@master
+      env:
+        SNYK_TOKEN: ${{ secrets.snykToken }}
+      with:
+        image: ${{ env.IMAGE_NAME }}:${{ inputs.currentTag }}
