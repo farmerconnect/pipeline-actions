@@ -63,6 +63,13 @@ jobs:
           name: ${{ inputs.serviceName }}
           location: 'central us'
 
+      - name: Run Snyk to check Docker image for vulnerabilities
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.snykToken }}
+        with:
+          image: ${{ secrets.registryLoginServer }}/${{ inputs.serviceName }}:${{ inputs.currentTag }}
+
       - name: Deploy to registry - latest
         uses: azure/aci-deploy@v1
         with:
@@ -75,13 +82,25 @@ jobs:
           name: ${{ inputs.serviceName }}
           location: 'central us'
 
-  snyk-docker-scan:
-    runs-on: ubuntu-latest
-    needs: build-and-push-image
-    steps:
-    - name: Run Snyk to check Docker image for vulnerabilities
-      uses: snyk/actions/docker@master
-      env:
-        SNYK_TOKEN: ${{ secrets.snykToken }}
-      with:
-        image: ${{ secrets.registryLoginServer }}/${{ inputs.serviceName }}:${{ inputs.currentTag }}
+  # snyk-docker-scan:
+  #   runs-on: ubuntu-latest
+  #   needs: build-and-push-image
+  #   steps:
+  #   - name: AZ login
+  #     uses: azure/login@v1
+  #     with:
+  #       creds: ${{ secrets.azureCredentials }}
+
+  #   - name: Docker login
+  #     uses: azure/docker-login@v1
+  #     with:
+  #       login-server: ${{ secrets.registryLoginServer }}
+  #       username: ${{ secrets.registryUsername }}
+  #       password: ${{ secrets.registryPassword }}
+
+  #   - name: Run Snyk to check Docker image for vulnerabilities
+  #     uses: snyk/actions/docker@master
+  #     env:
+  #       SNYK_TOKEN: ${{ secrets.snykToken }}
+  #     with:
+  #       image: ${{ secrets.registryLoginServer }}/${{ inputs.serviceName }}:${{ inputs.currentTag }}
