@@ -75,7 +75,7 @@ jobs:
           name: ${{ inputs.serviceName }}
           location: 'central us'
 
-  security:
+  snyk-docker-scan:
     runs-on: ubuntu-latest
     needs: build-and-push-image
     steps:
