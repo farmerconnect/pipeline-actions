@@ -76,12 +76,12 @@ jobs:
           location: 'central us'
 
   snyk-docker-scan:
-    - name: Snyk docker scan
-      needs: build-and-push-image
-      uses: farmerconnect/pipeline-actions/.github/snyk-docker.yaml@feat/snyk
-      with:
-        containerRegistryUrl: ${{ secrets.registryLoginServer }}
-        imageName: ${{ inputs.serviceName }}
-        imageTag: ${{ inputs.currentTag }}
-      secrets:
-        snykToken: ${{ secrets.snykToken }}
+    name: Snyk docker scan
+    needs: build-and-push-image
+    uses: farmerconnect/pipeline-actions/.github/snyk-docker.yaml@feat/snyk
+    with:
+      containerRegistryUrl: ${{ secrets.registryLoginServer }}
+      imageName: ${{ inputs.serviceName }}
+      imageTag: ${{ inputs.currentTag }}
+    secrets:
+      snykToken: ${{ secrets.snykToken }}
