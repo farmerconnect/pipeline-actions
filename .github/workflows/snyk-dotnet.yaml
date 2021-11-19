@@ -1,0 +1,17 @@
+name: Snyk - Dotnet
+
+on:
+  workflow_call:
+    secrets:
+      snykToken:
+        required: true
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/dotnet@master
+        env:
+          SNYK_TOKEN: ${{ secrets.snykToken }}

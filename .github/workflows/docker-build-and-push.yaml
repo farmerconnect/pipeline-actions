@@ -20,6 +20,8 @@ on:
         required: true
       registryPassword:
         required: true
+      snykToken:
+        required: true
 
 
 jobs:
@@ -60,6 +62,13 @@ jobs:
           registry-password: ${{ secrets.registryPassword }}
           name: ${{ inputs.serviceName }}
           location: 'central us'
+
+      - name: Run Snyk to check Docker image for vulnerabilities
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.snykToken }}
+        with:
+          image: ${{ secrets.registryLoginServer }}/${{ inputs.serviceName }}:${{ inputs.currentTag }}
 
       - name: Deploy to registry - latest
         uses: azure/aci-deploy@v1
