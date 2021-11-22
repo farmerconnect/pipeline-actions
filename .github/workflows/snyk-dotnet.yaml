@@ -15,3 +15,5 @@ jobs:
         uses: snyk/actions/dotnet@master
         env:
           SNYK_TOKEN: ${{ secrets.snykToken }}
+        with:
+          args: --all-projects --detection-level=3
