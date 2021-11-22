@@ -2,6 +2,10 @@ name: Snyk - Dotnet
 
 on:
   workflow_call:
+    inputs:
+      targetFile:
+        type: string
+        required: true
     secrets:
       snykToken:
         required: true
@@ -16,4 +20,4 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.snykToken }}
         with:
-          args: --all-projects --detection-level=3
+          args: --fail-on=all --severity-threshold=high --file=${{ inputs.targetFile }}
