@@ -16,7 +16,7 @@ on:
       environment:
         required: true
         type: string
-        description: "github environment: github environment: dev test prod-westeurope prod-centralus"
+        description: "github environment: dev test prod-westeurope prod-centralus"
       values:
         required: true
         type: string
