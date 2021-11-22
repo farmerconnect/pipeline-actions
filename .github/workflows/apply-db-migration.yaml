@@ -1,0 +1,37 @@
+name: Apply DB migration
+
+on:
+  workflow_call:
+    inputs:
+      serverName:
+        required: true
+        type: string
+    secrets:
+      connectionString:
+        required: true
+
+jobs:
+  apply-db-migration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2      
+      - name: Download Artifacts from current run
+        uses: actions/download-artifact@v2
+        if: ${{ inputs.downloadArtifactFromCurrentRun }}
+          
+      - name: Download Artifacts previous run
+        uses: dawidd6/action-download-artifact@v2
+        if: ${{ !inputs.downloadArtifactFromCurrentRun }}
+        with:
+          workflow: ${{ inputs.downloadArtifactFromWorkflow }}
+          workflow_conclusion: success
+
+      - name: Azure SQL Deploy
+        uses: Azure/sql-action@v1
+        with:
+          # Name of the Azure SQL Server name, like Fabrikam.database.windows.net.
+          server-name: ${{ inputs.serverName }}
+          # The connection string, including authentication information, for the Azure SQL Server database.
+          connection-string: ${{ secrets.connectionString }}
+          # Path to SQL script file to deploy
+          sql-file: database/migration.sql

@@ -1,0 +1,26 @@
+name: Generate DB migration
+
+on:
+  workflow_call:
+    inputs:
+      csprojPath:
+        required: true
+        type: string
+
+jobs:
+  generate-db-migration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Entity Framework
+        run: dotnet tool install dotnet-ef --global --version 6.0.0
+        shell: bash
+
+      - name: Create migration
+        run: dotnet ef migrations script --project ${{ inputs.csprojPath }} --idempotent -o "database/migration.sql"
+        shell: bash
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: database
+          path: path/to/migration
