@@ -16,6 +16,10 @@ on:
       environment:
         required: true
         type: string
+        description: "github environment: github environment: dev test prod-westeurope prod-centralus"
+      values:
+        required: true
+        type: string
         description: "helm chart values: dev test prod"
       context:
         required: true
@@ -28,6 +32,8 @@ jobs:
   deploy:
     name: Deploy to AKS
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -45,5 +51,5 @@ jobs:
       - name: Helm Upgrade
         uses: WyriHaximus/github-action-helm3@v2
         with:
-          exec: helm upgrade --kube-context ${{ inputs.context }} --namespace ${{ inputs.namespace }} --install --values ./charts/values-${{ inputs.environment }}.yaml --set serviceVersion=${{ inputs.currentTag }} --wait --atomic --timeout 300s ${{ inputs.serviceName }} path/to/charts/${{ inputs.serviceName }}-1.0.0.tgz
+          exec: helm upgrade --kube-context ${{ inputs.context }} --namespace ${{ inputs.namespace }} --install --values ./charts/values-${{ inputs.values }}.yaml --set serviceVersion=${{ inputs.currentTag }} --wait --atomic --timeout 300s ${{ inputs.serviceName }} path/to/charts/${{ inputs.serviceName }}-1.0.0.tgz
           kubeconfig: '${{ secrets.KUBECONFIG }}'
