@@ -15,3 +15,5 @@ jobs:
         uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.snykToken }}
+        with:
+          args: --fail-on=all --severity-threshold=high
