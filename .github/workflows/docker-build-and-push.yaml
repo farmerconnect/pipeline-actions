@@ -44,24 +44,11 @@ jobs:
           login-server: ${{ secrets.registryLoginServer }}
           username: ${{ secrets.registryUsername }}
           password: ${{ secrets.registryPassword }}
-      - name: Build and push image
+
+      - name: Build images
         run: |
           docker build . -t ${IMAGE_NAME}:${{ inputs.currentTag }}
           docker build . -t ${IMAGE_NAME}:latest
-          docker push ${IMAGE_NAME}:${{ inputs.currentTag }}
-          docker push ${IMAGE_NAME}:latest
-
-      - name: Deploy to registry - current
-        uses: azure/aci-deploy@v1
-        with:
-          resource-group: ${{ secrets.resourceGroup }}
-          dns-name-label: ${{ secrets.resourceGroup }}${{ github.run_number }}
-          image: ${{ env.IMAGE_NAME }}:${{ inputs.currentTag }}
-          registry-login-server: ${{ secrets.registryLoginServer }}
-          registry-username: ${{ secrets.registryUsername }}
-          registry-password: ${{ secrets.registryPassword }}
-          name: ${{ inputs.serviceName }}
-          location: 'central us'
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
@@ -70,14 +57,7 @@ jobs:
         with:
           image: ${{ secrets.registryLoginServer }}/${{ inputs.serviceName }}:${{ inputs.currentTag }}
 
-      - name: Deploy to registry - latest
-        uses: azure/aci-deploy@v1
-        with:
-          resource-group: ${{ secrets.resourceGroup }}
-          dns-name-label: ${{ secrets.resourceGroup }}${{ github.run_number }}
-          image: ${{ env.IMAGE_NAME }}:latest
-          registry-login-server: ${{ secrets.registryLoginServer }}
-          registry-username: ${{ secrets.registryUsername }}
-          registry-password: ${{ secrets.registryPassword }}
-          name: ${{ inputs.serviceName }}
-          location: 'central us'
+      - name: Push images to registry container
+        run: |
+          docker push ${IMAGE_NAME}:${{ inputs.currentTag }}
+          docker push ${IMAGE_NAME}:latest
