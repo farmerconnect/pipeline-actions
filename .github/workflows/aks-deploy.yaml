@@ -16,7 +16,7 @@ on:
       environment:
         required: true
         type: string
-        description: "dev test prod"
+        description: "helm chart values: dev test prod"
       context:
         required: true
         type: string
@@ -28,8 +28,6 @@ jobs:
   deploy:
     name: Deploy to AKS
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ inputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
