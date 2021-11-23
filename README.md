@@ -20,7 +20,11 @@ Packages a Helm chart to prepare for deployment.
 
 ### aks-deploy
 
-Deploy a Helm application to Kubernetes in AKS.
+Deploys a Helm application to Kubernetes in AKS.
+
+### apply-db-migration
+
+Generates and applies a DB migration with Entity Framework.
 
 ## actions
 
@@ -29,3 +33,11 @@ Actions are simple operations that reuse environment variables. Prefer them if t
 ### cypress
 
 Runs cypress tests in NPM-based projects. Requires "cypress" script in package.json with the desired command.
+
+### dotnet-5-test
+
+Tests and builds .NET-based projects in version 5.
+
+### dotnet-6-test
+
+Tests and builds .NET-based projects in version 6.

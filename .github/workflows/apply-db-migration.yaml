@@ -1,0 +1,47 @@
+name: Apply DB migration
+
+on:
+  workflow_call:
+    inputs:
+      serverName:
+        required: true
+        type: string
+      currentTag:
+        required: true
+        type: string
+      csprojPath:
+        required: true
+        type: string
+    secrets:
+      connectionString:
+        required: true
+
+jobs:
+  apply-db-migration:
+    runs-on: windows-latest
+    steps:
+      #check out current tag to have matching version between docker image and DB migration
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.currentTag }}
+    
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+
+      - name: Install Entity Framework
+        run: dotnet tool install dotnet-ef --global
+        shell: pwsh
+
+      - name: Create migration
+        run: dotnet ef migrations script --project ${{ inputs.csprojPath }} --idempotent -o "database/migration.sql"
+        shell: pwsh
+
+      - name: Azure SQL Deploy
+        uses: Azure/sql-action@v1
+        with:
+          # Name of the Azure SQL Server name, like Fabrikam.database.windows.net.
+          server-name: ${{ inputs.serverName }}
+          # The connection string, including authentication information, for the Azure SQL Server database.
+          connection-string: ${{ secrets.connectionString }}
+          # Path to SQL script file to deploy
+          sql-file: database/migration.sql
