@@ -17,14 +17,6 @@ jobs:
       - uses: actions/checkout@v2      
       - name: Download Artifacts from current run
         uses: actions/download-artifact@v2
-        if: ${{ inputs.downloadArtifactFromCurrentRun }}
-          
-      - name: Download Artifacts previous run
-        uses: dawidd6/action-download-artifact@v2
-        if: ${{ !inputs.downloadArtifactFromCurrentRun }}
-        with:
-          workflow: ${{ inputs.downloadArtifactFromWorkflow }}
-          workflow_conclusion: success
 
       - name: Azure SQL Deploy
         uses: Azure/sql-action@v1
