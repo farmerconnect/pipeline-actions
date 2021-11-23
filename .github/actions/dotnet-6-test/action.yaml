@@ -31,9 +31,9 @@ runs:
       shell: bash
 
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build -c Release --no-restore
       shell: bash
 
     - name: Run tests
-      run: dotnet test --no-build --verbosity normal `find . -name "${{ github.event.inputs.projects || inputs.projects }}"` --filter "${{ github.event.inputs.filter || inputs.filter }}"
+      run: dotnet test -c Release --no-build --verbosity normal `find . -name "${{ github.event.inputs.projects || inputs.projects }}"` --filter "${{ github.event.inputs.filter || inputs.filter }}"
       shell: bash
