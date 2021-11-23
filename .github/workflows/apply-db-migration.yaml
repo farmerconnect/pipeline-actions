@@ -6,6 +6,9 @@ on:
       serverName:
         required: true
         type: string
+      currentTag:
+        required: true
+        type: string
     secrets:
       connectionString:
         required: true
@@ -14,9 +17,21 @@ jobs:
   apply-db-migration:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2      
-      - name: Download Artifacts from current run
-        uses: actions/download-artifact@v2
+      #check out current tag to have matching version between docker image and DB migration
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.currentTag }}
+    
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+
+      - name: Install Entity Framework
+        run: dotnet tool install dotnet-ef --global
+        shell: bash
+
+      - name: Create migration
+        run: dotnet ef migrations script --project ${{ inputs.csprojPath }} --idempotent -o "database/migration.sql"
+        shell: bash
 
       - name: Azure SQL Deploy
         uses: Azure/sql-action@v1
