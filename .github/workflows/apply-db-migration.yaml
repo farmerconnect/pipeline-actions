@@ -9,6 +9,9 @@ on:
       currentTag:
         required: true
         type: string
+      csprojPath:
+        required: true
+        type: string
     secrets:
       connectionString:
         required: true
