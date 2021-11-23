@@ -22,13 +22,9 @@ Packages a Helm chart to prepare for deployment.
 
 Deploys a Helm application to Kubernetes in AKS.
 
-### generate-db-migration
-
-Generates a DB migration with Entity Framework.
-
 ### apply-db-migration
 
-Applies a DB migration with Entity Framework.
+Generates and applies a DB migration with Entity Framework.
 
 ## actions
 
