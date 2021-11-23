@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ${{ input.working-directory }}
+        working-directory: ${{ inputs.working-directory }}
     steps:
       - uses: actions/checkout@main
       - name: Set Job-Environment Variables
