@@ -30,11 +30,11 @@ jobs:
 
       - name: Install Entity Framework
         run: dotnet tool install dotnet-ef --global
-        shell: bash
+        shell: pwsh
 
       - name: Create migration
         run: dotnet ef migrations script --project ${{ inputs.csprojPath }} --idempotent -o "database/migration.sql"
-        shell: bash
+        shell: pwsh
 
       - name: Azure SQL Deploy
         uses: Azure/sql-action@v1
