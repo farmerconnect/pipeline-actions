@@ -9,6 +9,9 @@ on:
       currentTag:
         required: true
         type: string
+      working-directory:
+        required: false
+        type: string
     secrets:
       azureCredentials:
         required: true
@@ -28,6 +31,9 @@ jobs:
   build-and-push-image:
     name: Build and Push Stage
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ input.working-directory }}
     steps:
       - uses: actions/checkout@main
       - name: Set Job-Environment Variables
