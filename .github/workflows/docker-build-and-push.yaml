@@ -56,6 +56,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.snykToken }}
         with:
           image: ${{ secrets.registryLoginServer }}/${{ inputs.serviceName }}:${{ inputs.currentTag }}
+          args: --severity-threshold=high
 
       - name: Push images to registry container
         run: |
