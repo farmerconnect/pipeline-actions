@@ -53,9 +53,7 @@ jobs:
           password: ${{ secrets.registryPassword }}
 
       - name: Build images
-        run: |
-          docker build . -t ${IMAGE_NAME}:${{ inputs.currentTag }}
-          docker build . -t ${IMAGE_NAME}:latest
+        run: docker build . -t ${IMAGE_NAME}:${{ inputs.currentTag }}
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
@@ -66,6 +64,4 @@ jobs:
           args: --severity-threshold=high
 
       - name: Push images to registry container
-        run: |
-          docker push ${IMAGE_NAME}:${{ inputs.currentTag }}
-          docker push ${IMAGE_NAME}:latest
+        run: docker push ${IMAGE_NAME}:${{ inputs.currentTag }}
