@@ -13,9 +13,18 @@ inputs:
     type: string
     description: XUnit filter
     default: ''
+   workingDirectory:
+    required: false
+    type: string
+    description: working directory of project
+    default: '.'
 
 runs:
   using: "composite"
+  defaults:
+  run:
+    working-directory: ${{ github.event.inputs.workingDirectory || inputs.workingDirectory }}
+    shell: bash
   steps:
     - uses: actions/checkout@v2
 
