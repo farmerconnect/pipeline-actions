@@ -39,8 +39,6 @@ runs:
       shell: bash
 
     - name: Run tests
-      defaults:
-        run:
-          working-directory: ${{ github.event.inputs.working-directory || inputs.working-directory }}
+      working-directory: ${{ github.event.inputs.working-directory || inputs.working-directory }}
       run: dotnet test -c Release --no-build --verbosity normal `find . -name "${{ github.event.inputs.projects || inputs.projects }}"` --filter "${{ github.event.inputs.filter || inputs.filter }}"
       shell: bash
