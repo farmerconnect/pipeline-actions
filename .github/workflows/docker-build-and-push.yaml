@@ -54,9 +54,7 @@ jobs:
           password: ${{ secrets.registryPassword }}
 
       - name: Build images
-        run: docker build . -t ${IMAGE_NAME}:${{ inputs.currentTag }}
-        env:
-          NPM_TOKEN: ${{ secrets.npmToken }}
+        run: docker build . -t ${IMAGE_NAME}:${{ inputs.currentTag }} --build-arg NPM_TOKEN=${{ secrets.npmToken }}
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
