@@ -26,7 +26,8 @@ on:
         required: true
       snykToken:
         required: true
-
+      npmToken:
+        required: false
 
 jobs:
   build-and-push-image:
@@ -54,6 +55,8 @@ jobs:
 
       - name: Build images
         run: docker build . -t ${IMAGE_NAME}:${{ inputs.currentTag }}
+        env:
+          NPM_TOKEN: ${{ secrets.npmToken }}
 
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
