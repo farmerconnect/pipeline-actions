@@ -1,8 +1,8 @@
 # pipeline-actions
 
-Repository with generic Github actions to cover pipeline steps for farmer connect services
+Repository with generic GitHub actions to cover pipeline steps for farmer connect services.
 
-## workflows
+## Workflows
 
 Workflows to be used within any repository. Inside a job, mention the workflow in the keyword "uses". [Instructions here](https://docs.github.com/en/enterprise-cloud@latest/actions/learn-github-actions/reusing-workflows).
 
@@ -26,7 +26,7 @@ Deploys a Helm application to Kubernetes in AKS.
 
 Generates and applies a DB migration with Entity Framework.
 
-## actions
+## Actions
 
 Actions are simple operations that reuse environment variables. Prefer them if the parameters for a given task are not fixed and known beforehand.
 
